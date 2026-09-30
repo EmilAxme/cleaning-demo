@@ -1,0 +1,421 @@
+{
+  "_source": {
+    "css": "https://www.cleaningpraha.cz/_next/static/chunks/2d3w7ass04s7x.css (Tailwind v4 + shadcn base, then the site's own rules; later rules override earlier ones)",
+    "fetched": "2026-09-29",
+    "note": "Values copied from the CSS. Where the site overrides itself, \"final\" is what the live page shows."
+  },
+  "colors": {
+    "primary": {
+      "hex": "#214ce5",
+      "use": "THE brand blue: buttons, kicker labels, logo mark, active language, feature icons, guarantee start, favicon tile (--primary, --ring)"
+    },
+    "primaryHover": {
+      "hex": "#173bbd",
+      "use": ".btn:hover background"
+    },
+    "blue": {
+      "hex": "#4169ff",
+      "use": "--blue: nav underline, stepper hover, soft glows (body radial #4169ff14, calc blob #4169ff24)"
+    },
+    "blueDeep": {
+      "hex": "#183cc4",
+      "use": "--blue-deep (declared, not used by visible rules)"
+    },
+    "violet": {
+      "hex": "#5639d7",
+      "use": "end of the guarantee banner gradient"
+    },
+    "heroAccent": {
+      "hex": "#d7e1ff",
+      "use": "hero h1 <em> \"Znovu svěží.\" (final; earlier rule #d0e1ff), text-shadow 0 8px 35px #6384ff4d"
+    },
+    "kickerOnDark": {
+      "hex": "#a9c2ff",
+      "use": "kicker inside the dark booking card; select focus outline rgba(169,194,255,.55)"
+    },
+    "focus": {
+      "hex": "#6486ff",
+      "use": "focus-visible outline (3px, offset 5px)"
+    },
+    "inputFocusRing": {
+      "hex": "#6f8eff4d",
+      "use": "input focus box-shadow 0 0 0 4px",
+      "rgba": "rgba(111,142,255,0.302)"
+    },
+    "ink": {
+      "hex": "#0a1719",
+      "use": "--ink: final body text colour"
+    },
+    "foreground": {
+      "hex": "#172729",
+      "use": "--foreground / first body colour; thank-you page text; light button text"
+    },
+    "statsNumber": {
+      "hex": "#101d20",
+      "use": "stats <strong>"
+    },
+    "navy": {
+      "hex": "#14292b",
+      "use": "dark navy: booking card base, input text, before/after labels #14292bd9"
+    },
+    "navyGradient": {
+      "css": "radial-gradient(circle at 5% 5%, #294d50, #0d2022 55%)",
+      "use": "booking card (final)"
+    },
+    "heroBase": {
+      "hex": "#27383a",
+      "use": "hero background under the video"
+    },
+    "heroOverlay": {
+      "css": "linear-gradient(90deg,#051012eb 0%,#081416b3 47%,#0914151f 78%),linear-gradient(#0000 58%,#050e0f4d)",
+      "mobile": "linear-gradient(90deg,#051012e0,#08141678),linear-gradient(#0000,#050e0f59)",
+      "use": "dark left-to-right scrim over hero video"
+    },
+    "heroText": {
+      "hex": "#e2e6e5",
+      "use": "hero paragraph"
+    },
+    "heroNotes": {
+      "hex": "#e5e9e9",
+      "use": "hero checkmark notes"
+    },
+    "badgeBg": {
+      "hex": "#102627b8",
+      "use": "\"PRACUJEME 24/7\" glass pill (blur 7px, border #ffffff60, inset 0 1px #ffffff29)",
+      "rgba": "rgba(16,38,39,0.722)"
+    },
+    "liveDot": {
+      "hex": "#65f09c",
+      "use": "green pulsing dot in the badge, ring 0 0 0 5px #65f09c25"
+    },
+    "whatsapp": {
+      "hex": "#25d366",
+      "use": "floating WhatsApp button"
+    },
+    "white": {
+      "hex": "#ffffff",
+      "use": "page background, cards, light button"
+    },
+    "glassHeader": {
+      "hex": "#ffffffcc",
+      "use": "sticky header background + border (with backdrop blur 18px saturate 140%)",
+      "rgba": "rgba(255,255,255,0.8)"
+    },
+    "secondary": {
+      "hex": "#edf1fa",
+      "use": "--secondary / --accent"
+    },
+    "muted": {
+      "hex": "#f3f5f6",
+      "use": "--muted"
+    },
+    "mist": {
+      "hex": "#f3f6f7",
+      "use": "--mist"
+    },
+    "iconChipBg": {
+      "hex": "#f0f3fb",
+      "use": "round arrow button on service cards"
+    },
+    "calcBg": {
+      "css": "linear-gradient(145deg,#edf3f5,#f7f9ff)",
+      "flat": "#f2f5f8",
+      "use": "calculator section (final gradient; flat value also used on the thank-you page)"
+    },
+    "guaranteeGradient": {
+      "css": "linear-gradient(135deg,#214ce5,#5639d7)",
+      "use": "100% guarantee banner"
+    },
+    "bodyGlow": {
+      "css": "radial-gradient(circle at 85% 12%,#4169ff14,#0000 24rem),#fff",
+      "use": "body background (final)"
+    },
+    "textGreys": {
+      "mutedForeground": {
+        "hex": "#5a686d",
+        "use": "--muted-foreground; stats labels"
+      },
+      "note": {
+        "hex": "#657276",
+        "use": ".note, section intro, sticky bar label"
+      },
+      "serviceText": {
+        "hex": "#6b777a",
+        "use": "service card description"
+      },
+      "featureText": {
+        "hex": "#647175",
+        "use": "feature text, FAQ answers"
+      },
+      "calcSmall": {
+        "hex": "#68777a",
+        "use": "calculator item price"
+      },
+      "catalogPrice": {
+        "hex": "#59696d",
+        "use": "catalogue price column"
+      },
+      "langs": {
+        "hex": "#738082",
+        "use": "inactive language links"
+      },
+      "footer": {
+        "hex": "#66777a",
+        "use": "footer line"
+      },
+      "contactLink": {
+        "hex": "#263b3e",
+        "use": "footer contact tiles text"
+      },
+      "bookingText": {
+        "hex": "#b9c8ca",
+        "use": "text on dark booking card"
+      },
+      "bookingLabel": {
+        "hex": "#d8e0e1",
+        "use": "form labels on dark"
+      },
+      "bookingConsent": {
+        "hex": "#ced8d9",
+        "use": "consent text on dark"
+      }
+    },
+    "borders": {
+      "border": {
+        "hex": "#dce2e3",
+        "use": "--border / --input; sticky bar top border"
+      },
+      "stats": {
+        "hex": "#e0e5e5",
+        "use": "stats dividers"
+      },
+      "card": {
+        "hex": "#132a2d17",
+        "use": "service/result cards (final)",
+        "rgba": "rgba(19,42,45,0.09)"
+      },
+      "cardOld": {
+        "hex": "#dfe5e6",
+        "use": "contact tiles; earlier card border"
+      },
+      "list": {
+        "hex": "#e1e6e6",
+        "use": "catalogue rows, footer top"
+      },
+      "calc": {
+        "hex": "#dbe1e4",
+        "use": "calculator rows"
+      },
+      "stepper": {
+        "hex": "#d7e0e3",
+        "use": "stepper buttons"
+      },
+      "langsPill": {
+        "hex": "#e4e9eb",
+        "use": "language switcher pill"
+      },
+      "faq": {
+        "hex": "#dee4e5",
+        "use": "FAQ rows"
+      },
+      "outlineBtn": {
+        "hex": "#cbd3d4",
+        "use": ".btn.outline"
+      },
+      "contactHover": {
+        "hex": "#b9c8ff",
+        "use": "contact tile hover border"
+      }
+    }
+  },
+  "fonts": {
+    "webfonts": false,
+    "note": "No @font-face, no Google Fonts, nothing self-hosted in /_next/static/media: the site uses system fonts only, so there are no woff2 files or font licences to carry over.",
+    "sans": {
+      "stack": "Arial, Helvetica, sans-serif",
+      "use": "everything (body 16px / 1.55)"
+    },
+    "serifAccent": {
+      "stack": "Georgia, serif",
+      "style": "italic (from <em>)",
+      "weight": 400,
+      "use": "hero h1 second line \"Znovu svěží.\" / \"Снова свежая.\" / \"Fresh again.\""
+    },
+    "tailwindDefault": {
+      "stack": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "use": "Tailwind --font-sans; body overrides it, only reaches shadcn widgets"
+    }
+  },
+  "type": {
+    "h1": {
+      "size": "clamp(48px, 6.7vw, 96px)",
+      "weight": 500,
+      "letterSpacing": "-5px",
+      "lineHeight": 0.98,
+      "maxWidth": "920px",
+      "tablet": "letter-spacing -3px (<=900px)",
+      "mobile": "clamp(43px, 13vw, 62px), letter-spacing -2.6px (<=640px)"
+    },
+    "h1Accent": {
+      "family": "Georgia, serif",
+      "style": "italic",
+      "weight": 400,
+      "color": "#d7e1ff",
+      "textShadow": "0 8px 35px #6384ff4d"
+    },
+    "h2": {
+      "size": "clamp(38px, 4.3vw, 62px)",
+      "weight": 500,
+      "letterSpacing": "-2.6px",
+      "lineHeight": 1.02,
+      "mobile": "40px, letter-spacing -1px",
+      "booking": "44px (35px <=900, 34px <=640)"
+    },
+    "heroP": {
+      "size": "18px",
+      "lineHeight": 1.65,
+      "maxWidth": "540px",
+      "mobile": "16px"
+    },
+    "eyebrow": {
+      "size": "12px",
+      "weight": 600,
+      "letterSpacing": "2px",
+      "transform": "uppercase",
+      "marginBottom": "24px"
+    },
+    "kicker": {
+      "size": "12px",
+      "weight": 600,
+      "letterSpacing": "1.8px",
+      "transform": "uppercase",
+      "color": "#214ce5",
+      "before": "22px x 1px line in currentColor, gap 8px"
+    },
+    "badge": {
+      "size": "13px",
+      "weight": 700,
+      "letterSpacing": ".8px",
+      "padding": "9px 13px",
+      "mobile": "11px / .4px"
+    },
+    "button": {
+      "size": "15px",
+      "weight": 600,
+      "padding": "16px 23px",
+      "gap": "18px",
+      "radius": "999px",
+      "heroMobile": "14px, 14px 18px"
+    },
+    "stats": {
+      "number": "38px / 500 / -1px (26px on mobile)",
+      "label": "14px #5a686d"
+    },
+    "nav": "14px, gap 28px, underline 2px #4169ff grows on hover",
+    "langs": "13px, active #214ce5 bold, inside white pill border #e4e9eb padding 7px 10px",
+    "brandName": "20px bold, letter-spacing -1px (header); 22px in footer",
+    "brandTagline": "10px bold, letter-spacing 3px (1.8px on mobile), opacity .62 in header",
+    "body": "16px / 1.55",
+    "note": "14px"
+  },
+  "radii": {
+    "header": "18px",
+    "hero": "28px (22px <=640)",
+    "button": "999px",
+    "badge": "999px",
+    "langsPill": "999px",
+    "serviceCard": "22px",
+    "resultCard": "22px",
+    "summary": "24px",
+    "detailPhoto": "28px",
+    "guarantee": "22px",
+    "booking": "30px (22px <=640)",
+    "bookingTotal": "12px",
+    "input": "12px",
+    "select": "6px",
+    "contactTile": "16px",
+    "iconButton": "50%",
+    "shadcnRadius": ".7rem",
+    "faviconTile": "8px of 32"
+  },
+  "shadows": {
+    "header": "0 12px 42px #12272b17",
+    "button": "0 10px 24px #214ce52e",
+    "buttonHover": "0 16px 32px #214ce547 (+ translateY(-3px))",
+    "hero": "0 30px 90px #0c191a33",
+    "card": "0 18px 50px #142b2e12",
+    "cardHover": "0 28px 70px #142b2e21 (+ translateY(-9px), img scale 1.075)",
+    "summary": "0 28px 80px #122d321f",
+    "detailPhoto": "0 28px 70px #11252826",
+    "guarantee": "0 20px 50px #214ce538",
+    "booking": "0 28px 80px #0a1c1f2e",
+    "contactHover": "0 14px 35px #12272b17",
+    "whatsapp": "0 14px 35px #0000003b",
+    "heroAccentText": "0 8px 35px #6384ff4d",
+    "badgeInset": "inset 0 1px #ffffff29",
+    "liveDotRing": "0 0 0 5px #65f09c25"
+  },
+  "glassHeader": {
+    "background": "#ffffffcc",
+    "border": "1px solid #ffffffcc",
+    "backdropFilter": "blur(18px) saturate(140%)",
+    "height": "72px (68px <=640)",
+    "padding": "0 22px (0 14px <=640)",
+    "radius": "18px",
+    "position": "sticky; top 10px (6px <=900)",
+    "width": "calc(100% - 40px) (calc(100% - 20px) <=900)",
+    "margin": "10px auto 14px",
+    "shadow": "0 12px 42px #12272b17",
+    "zIndex": 40
+  },
+  "layout": {
+    "container": "max-width 1320px, padding 0 48px (24px <=900)",
+    "breakpoints": [
+      900,
+      640
+    ],
+    "sectionPadding": "120px (90px <=900, 76px <=640)",
+    "hero": "margin 0 20px, min-height calc(100svh - 112px), max-height 880px; mobile min-height calc(100svh - 90px)",
+    "stickyBar": ".mobile-cta only <=640px: fixed bottom, white, border-top #dce2e3, padding 12px 20px + safe-area, z 30",
+    "whatsappFloat": "58px circle fixed bottom 24 right 24; 52px at bottom 88 right 18 on phones (sits above sticky bar), z 35"
+  },
+  "motion": {
+    "reveal": "hero content: rise .65s both (opacity 0 -> 1, translateY 18px -> 0)",
+    "scrollRise": "@supports animation-timeline:view(): opacity 0, translateY(42px) scale(.985) -> none; range entry 5% cover 28% (+5% per card)",
+    "cardEase": "cubic-bezier(.2,.8,.2,1) .45s",
+    "imageZoom": "1s cubic-bezier(.2,.8,.2,1)",
+    "heroVideo": "cinema 14s ease-in-out infinite alternate: scale 1.025 -> 1.08",
+    "liveDot": "pulse 2s infinite (opacity .5 at 50%)",
+    "buttonHover": "translateY(-3px) .25s",
+    "reducedMotion": "all transitions/animations off, scroll-behavior auto"
+  },
+  "logo": {
+    "files": {
+      "lockup": "assets/brand/logo.svg",
+      "mark": "assets/brand/logo-mark.svg",
+      "favicon": "assets/brand/favicon.svg"
+    },
+    "note": "The site has no logo image: the header renders the Lucide \"sparkles\" icon (30px, #214ce5) next to text. logo.svg recreates that lockup 1:1 (checked against a Chromium render of the site markup + CSS: 233x44 px box). Lucide icons are ISC-licensed.",
+    "markup": "<a class=\"brand\" href=\"/cs\" aria-label=\"CleaningPraha\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-sparkles\" aria-hidden=\"true\"><path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\"></path><path d=\"M20 2v4\"></path><path d=\"M22 4h-4\"></path><circle cx=\"4\" cy=\"20\" r=\"2\"></circle></svg><span>CleaningPraha<small>UPHOLSTERY CARE · 24/7</small></span></a>",
+    "faviconSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" rx=\"8\" fill=\"#214ce5\"/><path d=\"M16 5l3 8 8 3-8 3-3 8-3-8-8-3 8-3z\" fill=\"white\"/></svg>\n"
+  },
+  "icons": {
+    "set": "Lucide (ISC), stroke 2, round caps, currentColor",
+    "dir": "assets/brand/icons",
+    "used": {
+      "sparkles": "logo",
+      "arrow-up-right": "primary buttons",
+      "arrow-right": "light \"Spočítat cenu\" button",
+      "check": "hero notes, summary, booking bullets",
+      "pause": "video toggle",
+      "play": "video toggle (from JS bundle)",
+      "scan-line": "care step 1",
+      "shield-check": "care step 2 + guarantee",
+      "wind": "care step 3 (drying)",
+      "at-sign": "Instagram tile",
+      "message-circle": "WhatsApp tile + float",
+      "phone": "phone tile",
+      "mail": "e-mail tile"
+    }
+  }
+}

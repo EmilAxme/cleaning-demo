@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="234" height="44" viewBox="0 0 234 44" role="img" aria-label="CleaningPraha">
+  <!-- Recreated from the header markup of cleaningpraha.cz (.header .brand):
+       30px Lucide "sparkles" in #214ce5, 10px gap, "CleaningPraha" Arial Bold 20px / -1px tracking,
+       "UPHOLSTERY CARE · 24/7" Arial Bold 10px / 3px tracking at .62 opacity. The site has no image logo. -->
+  <g transform="translate(0 7) scale(1.25)" fill="none" stroke="#214ce5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></g>
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#0a1719">
+    <text x="40" y="22.4" font-size="20" letter-spacing="-1">CleaningPraha</text>
+    <text x="40" y="41" font-size="10" letter-spacing="3" fill-opacity=".62">UPHOLSTERY CARE · 24/7</text>
+  </g>
+</svg>

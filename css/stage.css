@@ -1,0 +1,674 @@
+/* stage.css: the scene film (video layers, scrim, text blocks, progress).
+   Desktop sizes scale with --k = min(100vw/1440, 100vh/810): every size is
+   calc(N * var(--k)) against a 1440x810 artboard. Portrait viewports (the
+   9:16 media set) switch to a phone layout in px / vw / svh. */
+
+.stage {
+  --k: min(calc(100vw / 1440), calc(100vh / 810));
+  --paper-rgb: 247, 245, 241;
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 320px;
+  overflow: hidden;
+  background: var(--warm);
+  isolation: isolate;
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------ media layers */
+.stage-media,
+.stage-media > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.stage-media > * {
+  object-fit: cover;
+  object-position: 50% 50%;
+  max-width: none;
+}
+/* Some frames carry 2-4 px of black letterbox at the edges (baked into the
+   footage). The whole layer is overscanned a hair so they never show; the
+   container is scaled, not the children, because .still--top animates its own
+   transform. .stage clips the overflow. */
+.stage-media {
+  transform: scale(1.012);
+  transform-origin: 50% 50%;
+}
+.still--base {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.still--base.is-ready { opacity: 1; }
+.clip {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 120ms linear; /* TIMING.videoFadeMs */
+  background: transparent;
+  pointer-events: none;
+}
+.clip.is-visible { opacity: 1; }
+.still--top {
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
+}
+.still--top.is-visible { visibility: visible; }
+
+/* --------------------------------------------------------------- scrim */
+/* Light, warm-white wash behind the text so dark navy type stays readable
+   over bright footage. Faded out while clips play (the film gets the full
+   frame), shaped per scene by [data-scrim-scene]. */
+.stage-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease);
+  background:
+    linear-gradient(90deg,
+      rgba(var(--paper-rgb), 0.93) 0%,
+      rgba(var(--paper-rgb), 0.86) 20%,
+      rgba(var(--paper-rgb), 0.6) 33%,
+      rgba(var(--paper-rgb), 0.22) 44%,
+      rgba(var(--paper-rgb), 0) 54%);
+}
+.stage[data-scrim="on"] .stage-scrim { opacity: 1; }
+.stage[data-scrim-scene="2"] .stage-scrim,
+.stage[data-scrim-scene="3"] .stage-scrim {
+  /* close shot (stained, then clean): the cushion and the nozzle sit right of the text */
+  background:
+    radial-gradient(ellipse 52% 72% at 18% 40%,
+      rgba(var(--paper-rgb), 0.93) 0%,
+      rgba(var(--paper-rgb), 0.84) 44%,
+      rgba(var(--paper-rgb), 0.4) 72%,
+      rgba(var(--paper-rgb), 0) 100%);
+}
+
+/* --------------------------------------------------------------- blocks */
+.stage-blocks {
+  position: absolute;
+  z-index: 5;
+  left: var(--edge); /* = 120 * --k, the header and the sections share it */
+  top: calc(var(--header-top) + var(--header-h));
+  bottom: calc(96 * var(--k));
+  width: calc(560 * var(--k));
+  display: grid;
+  /* all blocks share one cell; fixed tracks so a hidden block never widens the others */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  pointer-events: none;
+}
+.block {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  pointer-events: none;
+}
+.block.is-in,
+.block.is-out { visibility: visible; }
+.block.is-in { pointer-events: auto; }
+.block--hero { width: calc(500 * var(--k)); }
+.block--care { width: calc(470 * var(--k)); align-self: start; margin-top: calc(40 * var(--k)); }
+.block--fresh { width: calc(540 * var(--k)); }
+
+/* staggered entrance: rise + fade + unblur, element by element (--i set by blocks.js) */
+.block [data-rise] {
+  opacity: 0;
+  transform: translate3d(0, calc(28 * var(--k)), 0);
+  filter: blur(10px);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 1.05s var(--ease-out),
+    filter 0.8s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms + 80ms);
+}
+.block.is-in [data-rise] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+/* exit: all together, short (0.35 s), slight lift */
+.block.is-out [data-rise] {
+  opacity: 0;
+  transform: translate3d(0, calc(-12 * var(--k)), 0);
+  filter: blur(6px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s ease,
+    filter 0.3s ease;
+  transition-delay: calc(var(--i, 0) * 8ms);
+}
+/* prefers-reduced-motion (or ?reduced=1): plain fade, no movement, no blur */
+html.reduced-motion .block [data-rise] {
+  transform: none;
+  filter: none;
+  transition: opacity 0.45s ease;
+  transition-delay: 0s;
+}
+html.reduced-motion .block.is-out [data-rise] { transition: opacity 0.25s ease; }
+
+/* ---- block content (desktop artboard sizes) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(10 * var(--k));
+  padding: calc(8 * var(--k)) calc(15 * var(--k)) calc(8 * var(--k)) calc(12 * var(--k));
+  margin-bottom: calc(28 * var(--k));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(20, 41, 43, 0.07);
+  box-shadow: 0 6px 22px rgba(20, 41, 43, 0.06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: max(10px, calc(12 * var(--k)));
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+.live-dot {
+  width: calc(8 * var(--k));
+  height: calc(8 * var(--k));
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 50%;
+  background: #28c46d;
+  box-shadow: 0 0 0 calc(4 * var(--k)) rgba(101, 240, 156, 0.28);
+  animation: live 2s ease-in-out infinite;
+}
+@keyframes live { 50% { opacity: 0.45; } }
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--k));
+  margin-bottom: calc(20 * var(--k));
+  font-size: max(10.5px, calc(12.5 * var(--k)));
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.eyebrow::before {
+  content: "";
+  width: calc(26 * var(--k));
+  height: 1px;
+  background: currentColor;
+}
+
+.display-1 {
+  font-family: var(--display);
+  font-size: calc(76 * var(--k));
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  margin-bottom: calc(26 * var(--k));
+  text-wrap: balance;
+}
+.lead {
+  font-size: max(13px, calc(18 * var(--k)));
+  line-height: 1.6;
+  color: var(--text);
+  max-width: calc(470 * var(--k));
+  margin-bottom: calc(34 * var(--k));
+}
+.block .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(12 * var(--k));
+  margin-bottom: calc(26 * var(--k));
+}
+.block .btn {
+  --btn-h: max(40px, calc(54 * var(--k)));
+  padding: 0 calc(22 * var(--k)) 0 calc(26 * var(--k));
+  gap: calc(14 * var(--k));
+  font-size: max(13px, calc(15 * var(--k)));
+}
+.block .btn .i { font-size: max(14px, calc(17 * var(--k))); }
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8 * var(--k)) calc(26 * var(--k));
+  font-size: max(12px, calc(14 * var(--k)));
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.checks li { display: flex; align-items: center; gap: calc(8 * var(--k)); }
+.checks .i { color: var(--blue); font-size: max(13px, calc(16 * var(--k))); stroke-width: 2.4; }
+
+/* scene 2 */
+.display-2 {
+  font-family: var(--display);
+  font-size: calc(58 * var(--k));
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin-bottom: calc(24 * var(--k));
+}
+.display-2 > span { display: block; }
+.accent {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+}
+.block--care .lead { margin-bottom: calc(28 * var(--k)); }
+.steps {
+  display: grid;
+  gap: calc(14 * var(--k));
+  padding-top: calc(24 * var(--k));
+  border-top: 1px solid rgba(20, 41, 43, 0.1);
+}
+.steps li { display: flex; align-items: center; gap: calc(16 * var(--k)); }
+.step-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: calc(42 * var(--k));
+  height: calc(42 * var(--k));
+  border-radius: 50%;
+  background: #fff;
+  color: var(--blue);
+  box-shadow: 0 6px 18px rgba(20, 41, 43, 0.08);
+}
+.step-icon .i { font-size: calc(19 * var(--k)); }
+.step-copy strong {
+  display: block;
+  font-size: max(12.5px, calc(15.5 * var(--k)));
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.step-copy > span {
+  display: block;
+  font-size: max(11.5px, calc(13.5 * var(--k)));
+  line-height: 1.45;
+  color: var(--muted-strong);
+}
+
+/* scene 3 */
+.pre-title {
+  font-family: var(--display);
+  font-size: calc(34 * var(--k));
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink-2);
+  margin-bottom: calc(2 * var(--k));
+}
+.display-accent {
+  font-family: var(--serif);
+  font-size: calc(106 * var(--k));
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--blue);
+  margin-bottom: calc(40 * var(--k));
+  text-shadow: 0 8px 35px rgba(99, 132, 255, 0.16);
+  white-space: nowrap;
+}
+.display-accent em { font-style: italic; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, calc(200 * var(--k)));
+  gap: calc(24 * var(--k)) 0;
+  margin-bottom: calc(40 * var(--k));
+}
+.stats li {
+  padding: 0 calc(24 * var(--k));
+  border-left: 1px solid rgba(20, 41, 43, 0.13);
+}
+.stats li:nth-child(odd) { padding-left: 0; border-left: 0; }
+.stats strong {
+  display: block;
+  font-family: var(--display);
+  font-size: calc(38 * var(--k));
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.stats span {
+  display: block;
+  max-width: calc(160 * var(--k));
+  margin-top: calc(6 * var(--k));
+  font-size: max(11px, calc(13.5 * var(--k)));
+  line-height: 1.35;
+  color: var(--muted-strong);
+  text-wrap: balance;
+}
+.block--fresh .actions { margin-bottom: 0; }
+
+/* scene 3: before / after. The site's own heading "Před a po" in one line,
+   its last word in the serif accent (i18n.js data-accent-last). */
+.block--ba .display-2 { text-wrap: balance; }
+.block--ba .display-2 .accent { display: inline; }
+.block--ba .lead { margin-bottom: calc(18 * var(--k)); }
+.ba-note {
+  max-width: calc(380 * var(--k));
+  font-size: max(11px, calc(12.5 * var(--k)));
+  line-height: 1.45;
+  color: var(--muted-strong);
+}
+
+/* ------------------------------------------------------ progress + hint */
+.stage-ui {
+  position: absolute;
+  z-index: 6;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: calc(40 * var(--k));
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  pointer-events: none;
+}
+.progress,
+.scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 26px rgba(20, 41, 43, 0.08);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.progress { justify-self: start; font-variant-numeric: tabular-nums; }
+.progress-num b { color: var(--blue); font-weight: 700; }
+.progress-num span { margin-left: 5px; color: var(--muted-strong); font-weight: 600; }
+.progress-bars { display: flex; gap: 6px; }
+.progress-bars i {
+  position: relative;
+  width: 26px;
+  height: 3px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(20, 41, 43, 0.14);
+}
+.progress-bars i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--fill, 0));
+}
+.scroll-hint {
+  grid-column: 2;
+  text-transform: uppercase;
+  transition: opacity 0.5s ease, transform 0.5s var(--ease);
+}
+.scroll-line {
+  position: relative;
+  width: 1.5px;
+  height: 18px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(20, 41, 43, 0.16);
+}
+.scroll-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 45%;
+  background: var(--blue);
+  animation: scroll-line 1.9s var(--ease) infinite;
+}
+@keyframes scroll-line {
+  0% { transform: translateY(-110%); }
+  60%, 100% { transform: translateY(240%); }
+}
+/* the hint only shows at rest */
+html:not([data-state="rest"]) .scroll-hint { opacity: 0; transform: translateY(6px); }
+html.reduced-motion .scroll-line::after { animation: none; transform: translateY(60%); }
+
+/* ------------------------------------------------------------- debug */
+.debug {
+  position: fixed;
+  z-index: 100;
+  left: 8px;
+  bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(10, 23, 25, 0.8);
+  color: #d7e1ff;
+  font: 11px/1.4 ui-monospace, Menlo, monospace;
+  pointer-events: none;
+  white-space: pre;
+}
+
+@media (min-aspect-ratio: 1001/1000) {
+  /* scene 4: "Znovu svěží." in two lines, inside the white wall left of the
+     olive tree (one line ran into the crown) */
+  .block--fresh { width: calc(470 * var(--k)); }
+  .display-accent {
+    white-space: normal;
+    max-width: calc(380 * var(--k));
+    font-size: calc(100 * var(--k));
+    line-height: 0.92;
+    margin-bottom: calc(36 * var(--k));
+  }
+  /* Cyrillic runs wider: landscape-only size tweaks for RU */
+  html[lang="ru"] .block--hero { width: calc(520 * var(--k)); }
+  html[lang="ru"] .display-1 { font-size: calc(68 * var(--k)); }
+  html[lang="ru"] .display-accent { font-size: calc(88 * var(--k)); max-width: calc(400 * var(--k)); }
+}
+
+/* =================================================== portrait (9:16 set) */
+@media (max-aspect-ratio: 1/1) {
+  .stage { --k: 1px; }
+  .stage-scrim {
+    background:
+      linear-gradient(180deg,
+        rgba(var(--paper-rgb), 0.95) 0%,
+        rgba(var(--paper-rgb), 0.9) 27%,
+        rgba(var(--paper-rgb), 0.62) 41%,
+        rgba(var(--paper-rgb), 0.18) 52%,
+        rgba(var(--paper-rgb), 0) 60%);
+  }
+  .stage[data-scrim-scene="2"] .stage-scrim,
+  .stage[data-scrim-scene="3"] .stage-scrim,
+  .stage[data-scrim-scene="4"] .stage-scrim {
+    /* the technician stands on the right: wash the top-left only */
+    background:
+      radial-gradient(ellipse 95% 48% at 12% 16%,
+        rgba(var(--paper-rgb), 0.95) 0%,
+        rgba(var(--paper-rgb), 0.86) 45%,
+        rgba(var(--paper-rgb), 0.35) 75%,
+        rgba(var(--paper-rgb), 0) 100%);
+  }
+  .stage-blocks {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    top: calc(var(--safe-t) + var(--header-top) + var(--header-h) + 20px);
+    bottom: auto;
+    align-items: start;
+  }
+  .block--hero,
+  .block--care,
+  .block--fresh { width: auto; margin-top: 0; }
+  .block--care { max-width: min(64%, 300px); }
+  .block--fresh { max-width: min(88%, 340px); }
+
+  .block [data-rise] { transform: translate3d(0, 22px, 0); }
+  .block.is-in [data-rise] { transform: none; }
+  .block.is-out [data-rise] { transform: translate3d(0, -10px, 0); }
+
+  .badge { margin-bottom: 12px; padding: 5px 11px 5px 9px; gap: 7px; font-size: 10px; letter-spacing: 0.05em; }
+  .live-dot { width: 7px; height: 7px; box-shadow: 0 0 0 3px rgba(101, 240, 156, 0.28); }
+  .eyebrow { margin-bottom: 8px; gap: 10px; font-size: 10.5px; letter-spacing: 0.15em; }
+  .eyebrow::before { width: 18px; }
+  /* type follows the height too (svh): the heads of the people sit at ~45 %
+     of the height in every 9:16 frame and the text has to end above them */
+  .display-1 {
+    font-size: clamp(28px, min(10.5vw, 4.8svh), 52px);
+    letter-spacing: -0.04em;
+    margin-bottom: 10px;
+  }
+  .lead { font-size: clamp(13px, min(3.7vw, 2.15svh), 16px); line-height: 1.45; margin-bottom: 14px; max-width: 34em; }
+  /* phone: compact buttons so both fit on one line and the block keeps clear of the people */
+  .block .actions { gap: 8px; margin-bottom: 10px; }
+  .block .btn { --btn-h: 44px; padding: 0 13px 0 16px; gap: 7px; font-size: clamp(12.5px, 3.4vw, 14px); }
+  .block .btn .i { font-size: 14px; }
+  .block .btn-light { padding: 0 15px; }
+  .block .btn-light .i { display: none; }
+  .checks { gap: 4px 14px; font-size: clamp(11.5px, 3.2vw, 12.5px); }
+  .checks li { gap: 6px; }
+  .checks .i { font-size: 14px; }
+
+  .display-2 { font-size: clamp(28px, 8.4vw, 40px); margin-bottom: 12px; letter-spacing: -0.035em; }
+  .block--care .lead { font-size: 14px; margin-bottom: 0; }
+  .block--ba .lead { margin-bottom: 8px; }
+  .ba-note { font-size: 11px; max-width: 26em; }
+  /* scene 3: the technician's head starts at ~60 % of the width, level with these lines */
+  .block--ba .lead,
+  .block--ba .ba-note { max-width: min(55vw, 26em); }
+  .steps { display: none; } /* phone: the technician needs the right half of the frame */
+
+  .pre-title { font-size: clamp(18px, 5.4vw, 24px); }
+  .display-accent { font-size: clamp(40px, 14vw, 72px); margin-bottom: 18px; }
+  html[lang="ru"] .display-accent { font-size: clamp(36px, 12vw, 62px); }
+  .stats { grid-template-columns: repeat(2, auto); justify-content: start; gap: 14px 0; margin-bottom: 0; }
+  .stats li { padding: 0 18px; }
+  .stats strong { font-size: clamp(22px, 6.6vw, 30px); }
+  .stats span { max-width: 9.5em; font-size: 12px; margin-top: 3px; }
+  .block--fresh .actions { display: none; } /* the sticky bar carries "Vybrat termín" */
+
+  .stage-ui {
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(var(--stage-ui-bottom, 24px) + var(--safe-b));
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+  }
+  .progress, .scroll-hint { height: 34px; padding: 0 13px; gap: 10px; font-size: 11px; white-space: nowrap; }
+  .progress-bars i { width: 18px; }
+  .scroll-hint { grid-column: 2; justify-self: start; }
+}
+
+/* real Safari viewports (toolbar shown: 390x664, 393x660, SE 375x667, Android
+   360x740): the text must end above the people. Scene 1 drops its two checks
+   (scene 4 repeats "0 Kč doprava po Praze"), scenes 2 and 3 drop the lead
+   (it ran over the technician's glove and hose); scene 3 keeps its note. */
+@media (max-aspect-ratio: 1/1) and (max-height: 760px) {
+  .block--hero .checks,
+  .block--care .lead { display: none; }
+  .block--hero .actions { margin-bottom: 0; }
+}
+/* short phones (iPhone SE): the badge gives way, the hero must stay above the people */
+@media (max-aspect-ratio: 1/1) and (max-height: 700px) {
+  .block--hero .badge,
+  .block--fresh .pre-title { display: none; }
+  .display-accent { margin-bottom: 12px; }
+  .stats { gap: 10px 0; }
+  .stats strong { font-size: 22px; }
+  .stats span { font-size: 11px; }
+}
+/* SE with the toolbar (375x548) and 320x568: scene 1 keeps heading + buttons */
+@media (max-aspect-ratio: 1/1) and (max-height: 600px) {
+  .block--hero .lead { display: none; }
+}
+/* 320-380 px wide: both hero buttons on one line (RU "Рассчитать стоимость"),
+   stat labels clear of the technician on the right */
+@media (max-aspect-ratio: 1/1) and (max-width: 380px) {
+  .block .btn { padding: 0 12px 0 14px; gap: 6px; }
+  .block .btn-primary .i { display: none; }
+  .block .btn-primary { padding: 0 14px; }
+  .stats li { padding: 0 12px; }
+  .stats span { max-width: 8em; }
+}
+@media (max-aspect-ratio: 1/1) and (max-width: 340px) {
+  .block .actions { gap: 6px; }
+  .block .btn { --btn-h: 40px; }
+}
+/* the shortest portrait screens: the block starts closer to the header and
+   the stat labels keep to one line (two-line labels ran into the couple) */
+@media (max-aspect-ratio: 1/1) and (max-height: 600px) {
+  .stage-blocks { top: calc(var(--safe-t) + var(--header-top) + var(--header-h) + 12px); }
+  .stats span { max-width: none; white-space: nowrap; }
+}
+
+/* phones: the sticky price bar (with the WhatsApp button) sits at the bottom */
+@media (max-width: 640px) {
+  .stage { --stage-ui-bottom: 92px; }
+  /* phones: the 24/7 badge gives way (scene 3 repeats "24/7" in its stats) so the
+     hero text ends above the people in the frame */
+  .block--hero .badge { display: none; }
+  .progress-bars i { width: 14px; }
+}
+/* 320-359 px: "01 / 04" is enough, the scroll hint keeps its full word */
+@media (max-width: 359px) {
+  .progress-bars { display: none; }
+}
+
+/* very short landscape windows (phone turned sideways): only the essentials.
+   Blocks hang from the header instead of centring (a tall block used to spill
+   up under the glass header) and end above the progress pill. The header
+   carries "Vybrat termín" here (page.css), so scene 4 drops its button. */
+@media (min-aspect-ratio: 1001/1000) and (max-height: 520px) {
+  .stage-blocks {
+    top: calc(var(--safe-t) + var(--header-top) + var(--header-h) + 10px);
+    bottom: calc(50px + var(--safe-b));
+    width: max(calc(560 * var(--k)), 380px);
+    align-items: start;
+  }
+  /* the text column is relatively wider here: the scrim reaches further right */
+  .stage-scrim {
+    background:
+      linear-gradient(90deg,
+        rgba(var(--paper-rgb), 0.93) 0%,
+        rgba(var(--paper-rgb), 0.88) 26%,
+        rgba(var(--paper-rgb), 0.72) 38%,
+        rgba(var(--paper-rgb), 0.34) 48%,
+        rgba(var(--paper-rgb), 0) 58%);
+  }
+  /* scene 1: the text column ends left of the couple (~46 % of the frame) */
+  .block--hero,
+  html[lang="ru"] .block--hero { width: min(max(calc(500 * var(--k)), 340px), calc(46vw - var(--edge))); }
+  .block--care, .block--fresh { width: max(calc(470 * var(--k)), 330px); margin-top: 0; align-self: start; }
+  .block--hero .badge, .block--hero .checks, .steps { display: none; }
+  .eyebrow { margin-bottom: 8px; }
+  .display-1 { margin-bottom: 10px; }
+  .lead { font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
+  .block--hero .lead { max-width: none; }
+  .block--ba .lead, .ba-note { max-width: min(330px, calc(50vw - var(--edge))); }
+  /* the buttons stay one row; below the heads they may pass over the sofa */
+  .block .actions { flex-wrap: nowrap; width: max-content; gap: 8px; margin-bottom: 0; }
+  .block .btn { --btn-h: 38px; padding: 0 14px 0 16px; gap: 7px; font-size: 12.5px; }
+  .block .btn-light .i { display: none; }
+  .display-accent { margin-bottom: 12px; }
+  .stats { grid-template-columns: repeat(2, auto); justify-content: start; gap: 8px 0; margin-bottom: 0; }
+  .stats li { padding: 0 14px; }
+  .stats strong { font-size: max(16px, calc(38 * var(--k))); }
+  .stats span { max-width: none; margin-top: 2px; white-space: nowrap; }
+  .block--fresh .actions { display: none; }
+  .stage-ui { bottom: calc(8px + var(--safe-b)); }
+  .progress { height: 32px; }
+  .scroll-hint { display: none; }
+}
+@media (min-aspect-ratio: 1001/1000) and (max-height: 330px) {
+  .block--hero .lead { display: none; }
+}
