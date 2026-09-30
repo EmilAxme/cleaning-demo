@@ -9,6 +9,12 @@
   <meta name="description" content="Profesionální péče o sedačky, matrace a koberce. U vás doma, šetrně k látce a s důrazem na každý detail.">
   <meta name="theme-color" content="#f6f4f0">
   <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+  <!-- The first frame of the film (S0) before anything else. One file per
+       viewport, with the media queries of config.js (MEDIA_QUERIES):
+       portrait -> m, phone turned sideways -> dl, other landscape -> d. -->
+  <link rel="preload" as="image" href="media/demo/m/s0.webp" fetchpriority="high" data-set="m" media="(max-aspect-ratio: 1/1)">
+  <link rel="preload" as="image" href="media/demo/dl/s0.webp" fetchpriority="high" data-set="dl" media="(min-aspect-ratio: 1001/1000) and (max-height: 520px)">
+  <link rel="preload" as="image" href="media/demo/d/s0.webp" fetchpriority="high" data-set="d" media="(min-aspect-ratio: 1001/1000) and (min-height: 520.01px)">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/stage.css">
   <link rel="stylesheet" href="css/page.css">
@@ -194,7 +200,7 @@
 
         <div class="cards">
           <article class="card" data-reveal>
-            <div class="card-media"><img src="assets/img/sofa-interior.webp" alt="" width="1200" height="801" loading="lazy" decoding="async"></div>
+            <div class="card-media"><img data-src="assets/img/sofa-interior.webp" alt="" width="1200" height="801" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <h3 data-t="services.cards.0.title">Sedačky a křesla</h3>
               <p data-t="services.cards.0.description">Malé, velké, rohové i modulární. Péče podle typu čalounění.</p>
@@ -205,7 +211,7 @@
             </div>
           </article>
           <article class="card" data-reveal>
-            <div class="card-media"><img src="assets/img/bedroom.webp" alt="" width="1200" height="953" loading="lazy" decoding="async"></div>
+            <div class="card-media"><img data-src="assets/img/bedroom.webp" alt="" width="1200" height="953" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <h3 data-t="services.cards.1.title">Matrace</h3>
               <p data-t="services.cards.1.description">Jednostranné i oboustranné čištění pro váš prostor k odpočinku.</p>
@@ -216,7 +222,7 @@
             </div>
           </article>
           <article class="card" data-reveal>
-            <div class="card-media card-media--rug"><img src="assets/img/rug.webp" alt="" width="1000" height="1500" loading="lazy" decoding="async"></div>
+            <div class="card-media card-media--rug"><img data-src="assets/img/rug.webp" alt="" width="1000" height="1500" loading="lazy" decoding="async"></div>
             <div class="card-body">
               <h3 data-t="services.cards.2.title">Koberce a koberečky</h3>
               <p data-t="services.cards.2.description">Kusové koberce i celoplošný koberec. Doma i v kanceláři.</p>

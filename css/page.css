@@ -519,8 +519,9 @@ html.reduced-motion [data-reveal] { transform: none !important; transition: opac
     line-height: 1.2;
     color: var(--muted-strong);
     overflow-wrap: break-word;
-    -webkit-hyphens: auto;
-    hyphens: auto;
+    /* no hyphen in the middle of a word on the common 390-393 px iPhones: wrap whole words */
+    -webkit-hyphens: manual;
+    hyphens: manual;
   }
   .mobile-bar-copy b {
     font-family: var(--display);

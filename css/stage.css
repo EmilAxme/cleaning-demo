@@ -346,7 +346,7 @@ html.reduced-motion .block.is-out [data-rise] { transition: opacity 0.25s ease; 
   margin-top: calc(6 * var(--k));
   font-size: max(11px, calc(13.5 * var(--k)));
   line-height: 1.35;
-  color: var(--muted-strong);
+  color: var(--text); /* the right column sits over the floor: --muted-strong fell to ~4:1 there */
   text-wrap: balance;
 }
 .block--fresh .actions { margin-bottom: 0; }
@@ -474,6 +474,15 @@ html.reduced-motion .scroll-line::after { animation: none; transform: translateY
   html[lang="ru"] .block--hero { width: calc(520 * var(--k)); }
   html[lang="ru"] .display-1 { font-size: calc(68 * var(--k)); }
   html[lang="ru"] .display-accent { font-size: calc(88 * var(--k)); max-width: calc(400 * var(--k)); }
+  html[lang="ru"] .pre-title { font-size: calc(31 * var(--k)); }
+}
+/* 4:3 .. 3:2 screens (iPad landscape) crop the sides of the frame, so the same
+   artboard text reaches further right: scene 4 steps down to stay off the tree */
+@media (min-aspect-ratio: 1001/1000) and (max-aspect-ratio: 3/2) {
+  .pre-title { font-size: calc(30 * var(--k)); }
+  html[lang="ru"] .pre-title { font-size: calc(28 * var(--k)); }
+  .display-accent { font-size: calc(90 * var(--k)); }
+  html[lang="ru"] .display-accent { font-size: calc(80 * var(--k)); }
 }
 
 /* =================================================== portrait (9:16 set) */
@@ -587,10 +596,6 @@ html.reduced-motion .scroll-line::after { animation: none; transform: translateY
   .stats strong { font-size: 22px; }
   .stats span { font-size: 11px; }
 }
-/* SE with the toolbar (375x548) and 320x568: scene 1 keeps heading + buttons */
-@media (max-aspect-ratio: 1/1) and (max-height: 600px) {
-  .block--hero .lead { display: none; }
-}
 /* 320-380 px wide: both hero buttons on one line (RU "Рассчитать стоимость"),
    stat labels clear of the technician on the right */
 @media (max-aspect-ratio: 1/1) and (max-width: 380px) {
@@ -604,10 +609,17 @@ html.reduced-motion .scroll-line::after { animation: none; transform: translateY
   .block .actions { gap: 6px; }
   .block .btn { --btn-h: 40px; }
 }
-/* the shortest portrait screens: the block starts closer to the header and
-   the stat labels keep to one line (two-line labels ran into the couple) */
+/* the shortest portrait screens (SE with the toolbar 375x548, 320x568): scene 1
+   keeps heading + buttons, the block starts closer to the header and the stat
+   labels keep to one line (two-line labels ran into the couple) */
 @media (max-aspect-ratio: 1/1) and (max-height: 600px) {
+  .block--hero .lead { display: none; }
   .stage-blocks { top: calc(var(--safe-t) + var(--header-top) + var(--header-h) + 12px); }
+  /* scene 3 on a short screen: the one-line heading must stay above the technician's head */
+  .block--ba .display-2 { font-size: clamp(24px, 7vw, 30px); margin-bottom: 8px; }
+}
+/* one-line stat labels only where the width allows it (at 320 px they ran into the technician) */
+@media (max-aspect-ratio: 1/1) and (max-height: 600px) and (min-width: 360px) {
   .stats span { max-width: none; white-space: nowrap; }
 }
 

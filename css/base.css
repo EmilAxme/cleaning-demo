@@ -70,10 +70,19 @@ html {
   background: var(--paper);
 }
 
-/* while the scenes own the viewport the document does not scroll */
+/* While the scenes own the viewport the document does not scroll: input.js
+   cancels wheel / touch / keys and machine.js holds the page at the top.
+   The scrollbar is hidden meanwhile (a classic Windows scrollbar could be
+   dragged against the film and the page tugged up and down). machine.lock()
+   measures its width into --sbw first, and the same width comes back as
+   padding / margin, so the page and the fixed header do not shift sideways
+   on release / recapture (scrollbar-gutter does not hold the gutter of a
+   root with overflow: hidden in Chromium). Overlay scrollbars: --sbw is 0. */
+html.is-locked { overflow: hidden; padding-right: var(--sbw, 0px); }
+html.is-locked .site-header,
+html.is-locked .wa-float { margin-right: var(--sbw, 0px); }
 html.is-locked,
 html.is-locked body {
-  overflow: hidden;
   overscroll-behavior: none;
 }
 
